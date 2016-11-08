@@ -1,0 +1,55 @@
+/* CSS Document */
+div#navi {
+	position: relative;
+	float: left;
+	width: 100%;
+    background-color:#FFD831;
+	margin-top: 0px;
+	vertical-align: bottom;
+}
+div#navi ul li {
+	display: inline;
+	text-decoration: none;
+	list-style-type: none;
+	padding: 0.25em;
+}
+div#navi a:link {
+	color: #00F;
+}
+div#navi a:visited {
+	color: #00F;
+}
+div#navi a:link:hover {
+	color: #0FF;
+}
+div#navi a:visited:hover {
+	color: #0FF;
+}
+.NavOn {
+	color: black;
+	text-decoration: none;
+}
+h1 {
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+}
+h2 {
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+}
+h3 {
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+}
+p {
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+}
+ul {
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+}
+ol {
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+}
+a {
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+}
+body {
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+}

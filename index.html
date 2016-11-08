@@ -1,0 +1,325 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>Facelooks</title>
+  <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+  <style type="text/css">
+    body { text-align:center;
+	  background-color:#E0E0D0;
+	}
+    #centerDiv { margin-right: auto; margin-left: auto; width: 720px; }
+    #centerbody { width: 600px; 
+      padding-left:60px; padding-right:60px; 
+	  padding-top:20px; 
+	  padding-bottom:70px; 
+	  text-align: left;
+	  background-color:#FFFFFF;
+	}
+	#myoutercontainer { position:absolute; height:68px; }
+	#myinnerimage { position:absolute; top:22px; height:48px; width:48px; margin-top: -11px; }
+	#mainpanel { position:relative; top:53px; width:600px;
+	  background-color:#FFFFFF;
+	}
+    p {
+        font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    }
+    h1 {
+        font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    }
+    h2 {
+        font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    }
+    h3 {
+        font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    }
+    ul {
+        font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    }
+    ol {
+        font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    }
+    td {
+        font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+        font-size: small;
+        text-align: center;
+    }
+    a {
+        font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    }
+</style>
+</head>
+
+<body>
+<br />
+<div id="centerDiv">
+<div id="centerbody">
+
+<font size="2" face="Verdana">
+<a name="top">&nbsp;<br></a>
+<div id="myoutercontainer">
+	<div id="myinnerimage">
+        <img src="images/logodef.png" width="48" height="48"
+        alt="Facelooks" border="0" align="left"></img>
+	</div>
+</div>
+<font size="2" face="Verdana">
+<div id="mainpanel">
+<h1>Facelooks</h1>
+<font size="2" face="Verdana">
+<ul>
+<li>[ <a href="http://treenimation.net/hahnbytes/">Hahnbytes</a> ]</li>
+<li>[ <a href="Facelooks.pdf">Printer-friendly</a> ]</li>
+</ul>
+<font size="2" face="Verdana">
+<p>
+Facelooks lets you manage your image collection, is written in Python, and requires a free tool called Flask (its database is SQLite which is bundled with Python). Facelooks is open source and web-based, yet almost all images are stored on the local hard drive. Facelooks' basic features let you navigate a tree of folders and image files using the arrow keys. Bottom-level folders let you display images in a grid. Clicking on the grid expands the image to full-screen.
+</p>
+<h2>Advanced Features</h2>
+<p>
+Features marked with asterisk (*) no longer needed
+</p>
+<ol>
+<li>Play videos</li>
+<li>Combine up to 3 images on one slide</li>
+<li>Modify image ordering in grid</li>
+<li>Access bookmark list</li>
+<li>Tag images</li>
+<li>* Crop images</li>
+<li>Magnify images (zoom in)</li>
+<li>* Post in user forum</li>
+<li>Use URL builder to access web addresses which contain facelooker name</li>
+<li>Use URL builder to step through a numbered list of images</li>
+<li>* Share folders and images using Dropbox</li>
+</ol>
+<h2>Slide-Handler</h2>
+<p>
+Up to 3 images displayed side-by-side. Clicking on any of the 3 images removes it. Clicking on white space toggles the display of a gray rectangle. Whenever a gray rectangle has been activated (displayed), and then an image other than the current slide is displayed and clicked on, the current slide is displayed and the image clicked on replaces the gray rectangle.
+</p>
+<h2>Hybrid Folders</h2>
+<p>
+Folder names ending with an underscore (hybrid folders) are treated differently from bottom-level folders. When a hybrid folder is activated, an image grid is displayed. Each image corresponds to the first image contained in each of the sub-folders of the hybrid folder.
+</p>
+<h2>Facelooker Names</h2>
+<p>
+A facelooker is a person who is the subject of an image included in a user's image collection. Facelooker folder names consist of the facelooker's first and last names, separated by an underscore character. All hyphens and spaces in that name are replaced with underscores, and only letters and apostrophe characters are allowed. Every facelooker folder name can have an optional prefix, consisting of digits followed by an underscore, as well as an optional suffix preceded by 2 underscores. The suffix can contain arbitrary text.
+</p>
+<h2>Image Sharing</h2>
+<p>
+Web surfers can search the Facelooks database of image meta-data, and then use Dropbox to access shared folders and images. Users can easily incorporate images of other users into their own image collections. Folders/images can be shared with just subsets of followers, or everyone.
+</p>
+<h2>Basic Features</h2>
+<ol>
+<li>Folder List
+    <ul>
+    <li>Left/Right: select</li>
+    <li>Up: parent folder list</li>
+    <li>Down/Enter: grid</li>
+    <li>Click: grid</li>
+    </ul>
+</li>
+<li>Grid of Images
+    <ul>
+    <li>Left/Right: previous/next grid</li>
+    <li>Up: folder list</li>
+    <li>Down/Enter: mono (current image)</li>
+    <li>Click: mono</li>
+    </ul>
+</li>
+<li>Mono Image
+    <ul>
+    <li>Single image</li>
+    <li>Left/Right: previous/next image</li>
+    <li>Up: grid</li>
+    <li>Click: grid + current image</li>
+    </ul>
+</li>
+</ol>
+<h2>Advanced Features in Detail</h2>
+<ol>
+<li>Play videos
+    <ul>
+    <li>WAV, MPEG, ...</li>
+    <li>local or URL</li>
+    </ul>
+</li>
+<li>Combine up to 3 images on one slide
+    <ul>
+    <li>file names: slides.arr, zoom.arr (in each folder containing a slide show)</li>
+    <li>sample contents: [3, 8, 2, -1, 7, -1, 14, 5, -1], [0, -1, 2, -1, 0, -1, 3, 0, -1]</li>
+    <li>slide terminator = -1</li>
+    <li>omit square brackets and white space in .arr files</li>
+    <li>slide show mode:
+        <ul>
+        <li>Left/Right: previous/next slide</li>
+        <li>Up/Down: insert/delete slide</li>
+        <li>Click (image): maximize height (zoom = 0)</li>
+        <li>Click again: remove from slide</li>
+        <li>Click (off image): toggle slide edit mode (gray on/off)</li>
+        <li>Press +, - : adjust zoom level (0, 1, 2, ...) of maximized image</li>
+        <li>'S': grid</li>
+        <li>'S' (grid): slide show</li>
+        </ul>
+    </li>
+    <li>slide edit mode:
+        <ul>
+        <li>Click (grid): slide show</li>
+        <li>Insert image in current slide</li>
+        </ul>
+    </li>
+    </ul>
+</li>
+<li>Modify image ordering in grid
+    <ul>
+    <li>Click (mono): grid + current image</li>
+    <li>Selected image(s): green border(s)</li>
+    <li>Left/Right: move current image</li>
+    <li>Click: select current image</li>
+    <li>Ctrl+Click: toggle selection (multi-select)</li>
+    <li>Shift+Click: select range of images</li>
+    <li>Click (current image): grid</li>
+    <li>XCVDRI: cut, copy, paste, delete, rename, inappropriate content</li>
+    </ul>
+</li>
+<li>Access bookmark list
+    <ul>
+    <li>bookmark images in bookmark.lst</li>
+    <li>allow nested bookmark categories (folders on hard drive)</li>
+    <li>'B' (mono): bookmark image</li>
+    <li>'B' (grid): edit bookmarks</li>
+    </ul>
+</li>
+<li>Tag images
+    <ul>
+    <li>see next section: Tag Database</li>
+    <li>need search dialog box</li>
+    <li>'T' (mono): edit tags</li>
+    <li>'T' (grid): search tags</li>
+    </ul>
+</li>
+<li>Crop images
+    <ul>
+    <li>drag and Enter</li>
+    <li>crop is permanent after pressing Enter</li>
+    <li>'K' (mono): toggle crop</li>
+    </ul>
+</li>
+<li>Magnify images (zoom in)
+    <ul>
+    <li>press +, -, 0</li>
+    <li>zoom in, zoom out, toggle maximize/normal</li>
+    <li>zoom factor = 1.174 (cube root of golden mean)</li>
+    <li>all zoom factors cancelled when user leaves current facelooker folder</li>
+    </ul>
+</li>
+<li>Post in user forum
+    <ul>
+    <li>moderation is crowd-sourced</li>
+    </ul>
+</li>
+<li>Use External URL Builder to access web addresses which contain facelooker name
+    <ul>
+    <li>'U': display URL list</li>
+    <li>'W': URL Builder dialog boxes</li>
+    <li>%s - facelooker name</li>
+    <li>%f - first name</li>
+    <li>%c - first letter of first name</li>
+    <li>%u0 - all caps</li>
+    <li>%u1 - capitalize first letter of each word</li>
+    <li>%xc - replace underscores with c</li>
+    <li>%xx - omit underscores</li>
+    <li>%ac - replace apostrophes with c</li>
+    <li>%ax - omit apostrophes</li>
+    <li>%% - insert percent char.</li>
+    </ul>
+</li>
+<li>Use Multi URL Builder to insert a numbered list of images
+    <ul>
+    <li>%16 - 01 thru 16 (or any 2-digit number)</li>
+    <li>%dn - n digits (default = 2)</li>
+    <li>%z - zero based (00 thru 15)</li>
+    <li>%y - omit leading zeros</li>
+    <li>%% - insert percent char.</li>
+    </ul>
+</li>
+<li>Share folders and images using Dropbox</li>
+<li>Folder List
+    <ul>
+    <li>Buttons:
+        <ul>
+        <li>Sync</li>
+        <li>Forum</li>
+        <li>Share</li>
+        <li>Clear All</li>
+        </ul>
+    </li>
+    <li>checkbox next to each folder name</li>
+    <li>XCVDRI: cut, copy, paste, delete, rename, inappropriate content</li>
+    </ul>
+</li>
+<li>Undo/Redo
+    <ul>
+    <li>'Z', 'Y'</li>
+    </ul>
+</li>
+<li>Help
+    <ul>
+    <li>'H', F1: toggle menu</li>
+    <li>Menu: H Z Y X C V D R I S B T K U W + - 0</li>
+    </ul>
+</li>
+</ol>
+<h2>Tag Database</h2>
+<ol>
+<li>DirTab: dirid, parid, dirname, isdel</li>
+<li>ImgTab: imgid, dirid, filename, gridpos, isurl, isvid, isdel</li>
+<li>TagMast: tagid, tagname, isdel</li>
+<li>TagTab: imgid, tagid (0 for no-name tag), desc, isdel</li>
+</ol>
+<h2>Sync Image Folder</h2>
+<ul>
+<li>for all image/video files not in database:
+    <ul>
+    <li>add to database</li>
+    </ul>
+</li>
+<li>for all images/videos in database not in folder:
+    <ul>
+    <li>remove from slides.arr</li>
+    <li>recursively remove from bookmark.lst files in bookmark tree</li>
+    <li>delete image (or video) record</li>
+    </ul>
+</li>
+<li>for all images where isdel = Y
+    <ul>
+    <li>delete them</li>
+    </ul>
+</li>
+<li>for all folders where isdel = Y
+    <ul>
+    <li>delete them</li>
+    <li>only upon Facelooks being shut down, or upon sync of parent</li>
+    </ul>
+</li>
+<li>if recursive checkbox is checked:
+    <ul>
+    <li>warn user that you cannot undo this operation</li>
+    <li>process current folder and all of its sub-folders</li>
+    </ul>
+</li>
+<li>otherwise:
+    <ul>
+    <li>enable user to undo sync operation if desired</li>
+    </ul>
+</li>
+</ul>
+<center>
+[ <a href="#top">Back to Top</a> ]
+</center>
+&nbsp;
+<br>
+</div>
+  </div>
+</div>
+</body>
+</html>
+
