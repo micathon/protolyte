@@ -89,6 +89,7 @@ def initdb_command():
     print 'Initialized the database.'
     
 def gendirinfo(imd):
+    """Populate image/file/dir lists."""
     global dirlist
     global dirimglist
     global dirsublist
@@ -103,33 +104,43 @@ def gendirinfo(imd):
     filelist = []
     absdirlist = glob.glob(imgdir + '*')
     absdirlist = sorted(absdirlist)
+    # for each subdirectory (full dir names)
     for absdir in absdirlist:
         dirname = os.path.basename(absdir)
         if not os.path.isdir(absdir):
             filename = dirname
             if debug:
                 print 'filename:', filename
+            # filelist contains files, not dirs.
             filelist.append(filename)
             continue
         if debug:
             print 'dirname:', dirname
+        # dirlist contains dirs., not files
         dirlist.append(dirname)
         imglist = []
         absimglist = getimglist(absdir)
+        # for each image file in subdirectory
         for absimg in absimglist:
             filename = os.path.basename(absimg)
             if debug:
                 print filename
+            # only gather valid image filenames containing printable chars.
             if isValidAsciiStr(filename):
                 imglist.append(filename)
         imglist = sorted(imglist)
         if debug:
             print 'imglist:', imglist
+        # dirimglist contains a list of lists of image filenames
         dirimglist.append(imglist)
         subdirlist = getsubdirlist(absdir, True)
         subdirlist = sorted(subdirlist)
+        # subdirlist contains list of subdirectories of this subdirectory
+        # dirsublist contains list of all subdirlist lists
         dirsublist.append(subdirlist)
     if len(filelist) > 0:
+        # files found in image directory
+        # append $ to list of dirs. (= current dir.)
         dirlist.append(dotchar)
         filelist = sorted(filelist)
         dirimglist.append(filelist)
@@ -140,6 +151,7 @@ def gendirinfo(imd):
         print '   dirlist:', dirlist
 
 def gendirinfofast(imd):
+    """Populate image/file/dir lists (use faces.db)."""
     global dirlist
     global dirimglist
     global dirsublist
@@ -149,30 +161,38 @@ def gendirinfofast(imd):
     dirimglist = []
     dirsublist = []
     filelist = []
+    # dir recs. of ancestors may be added
     dirid = getdiridfull(imgdir)
     rows = getimgrows(dirid)
     for row in rows:
         filename = row[2]
         isdel = row[4]
         if not isdel:
+            # gather non-empty img file names
             filelist.append(filename)
     rows = getdirrows(dirid)
+    # for all subdirectories
     for row in rows:
         dirid = row[0]
         dirname = row[2]
         isdel = row[5]
         if isdel:
+            # ignore empty dir recs.
             continue
+        # gather non-empty dir names
         dirlist.append(dirname)
         imglist = []
         absdir = imgdir + dirname
         subrows = getimgrows(dirid)
+        # for all img files in subdirectory
         for subrow in subrows:
             filename = subrow[2]
             isdel = subrow[4]
             if not isdel:
+                # gather non-empty img filenames
                 imglist.append(filename)
         imglist = sorted(imglist)
+        # dirimglist contains a list of lists of image filenames
         dirimglist.append(imglist)
         subdirlist = []
         subrows = getdirrows(dirid)
@@ -188,13 +208,13 @@ def gendirinfofast(imd):
         filelist = sorted(filelist)
         dirimglist.append(filelist)
         dirsublist.append([])
-    #if True:
     if debug:
         print 'dirimglist:', dirimglist
         print 'dirsublist:', dirsublist
         print '   dirlist:', dirlist
 
 def getimglist(absdir):
+    """Return image full filenames contained in dir."""
     absdir_sep = absdir + sepch
     absimglist = \
         glob.glob(absdir_sep + '*.jpg') + \
@@ -205,6 +225,7 @@ def getimglist(absdir):
     return absimglist
     
 def getsubdirlist(absdir, verbose):
+    """Return list of dir. names contained in dir."""
     subdirlist = []
     absdir_sep = absdir + sepch
     absfilelist = glob.glob(absdir_sep + '*' + sepch)
@@ -220,6 +241,7 @@ def getsubdirlist(absdir, verbose):
 @app.route('/foldr/')
 @app.route('/foldr/<adir>')
 def foldr(adir=None):
+    """Handle folder template: unordered list of directories."""
     if debug:
         print 'top of foldr'
     global imgdir
@@ -243,7 +265,8 @@ def foldr(adir=None):
     elif adir == FOLDR_LEFT:
         foldridx += len(dirlist) - 1
         isgendir = False
-    elif adir == "0":
+    elif adir == "0":  # up arrow
+        # go to parent folder
         parentdir = imgdir[:-1]
         parent = os.path.basename(parentdir)
         if debug:
@@ -252,11 +275,12 @@ def foldr(adir=None):
             imgdir = os.path.dirname(parentdir) + sepch
         gendirinfo(imgdir)
         foldridx = 0
-    elif adir == "-1":
+    elif adir == "-1":  # Enter
+        # go down a level in tree
         foldername = dirlist[foldridx]
         if debug:
             print 'foldr: foldername =', foldername
-        ch = foldername[-1]
+        ch = foldername[-1]  # last ch. of folder name
         subdirlist = dirsublist[foldridx]
         if ch == uscore:
             if debug:
@@ -275,7 +299,7 @@ def foldr(adir=None):
         foldridx = 0
         if ch == uscore:
             return redirect(url_for('dgrid'))
-    elif adir == "-3":
+    elif adir == "-3":  # up arrow from lower level grid
         dgmode = 0
         parentdir = imgdir[:-1]
         parent = os.path.basename(parentdir)
@@ -285,7 +309,7 @@ def foldr(adir=None):
             imgdir = os.path.dirname(parentdir) + sepch
         gendirinfo(imgdir)
         foldridx = 0
-    elif (adir == "-4") or (adir == "-5"):
+    elif (adir == "-4") or (adir == "-5"):  # SYNC or PACK
         foldername = dirlist[foldridx]
         fulldirname = os.path.join(imgdir, foldername) + sepch
         absimglist = getimglist(fulldirname)
@@ -294,11 +318,15 @@ def foldr(adir=None):
         sfcount = 0
         imgcount, emptycount = syncfolder(fulldirname, \
             absimglist, subdirlist, isrecursion, ispack)
-    elif adir == "-6":
+    elif adir == "-6":  # toggle recursion flag
         isrecursion = not isrecursion
-    elif adir == "-7":
+    elif adir == "-7":  # toggle all-directories flag
         isalldirs = not isalldirs
         foldridx = 0
+        # if all dirs flag then slow gendirinfo:
+        #   don't use faces.db when populating img/dir lists
+        # else use fast gendirinfofast:
+        #   use faces.db when populating those lists
     elif idir > 0:
         foldridx = idir - 1
 
@@ -312,7 +340,9 @@ def foldr(adir=None):
         else:
             j = i + 1
         imgtag = ('<a href="/foldr/%d">' % j) + dirname + '</a>'
+        # current dir name line is selected
         if iscurrline:
+            # allow user to SYNC or PACK or toggle 2 flags
             synctag = '<a href="/foldr/-4">SYNC</a>'
             packtag = '<a href="/foldr/-5">PACK</a>'
             if isrecursion:
@@ -352,6 +382,10 @@ def foldr(adir=None):
     return render_template('foldr.html', udirlist=udirlist)
 
 def getdiridfull(fulldirname):
+    """Return dirid of dir. & add ancestor dir recs. if non-existent
+    
+    should not return zero
+    """
     parid = 0
     pardirspath = getpardirspath(fulldirname)
     dirlist = pathtolist(pardirspath)
@@ -371,6 +405,15 @@ def getdiridfull(fulldirname):
     return dirid
 
 def syncfolder(fulldirname, absimglist, subdirlist, isrecur, ispack):
+    """Sync images in full dir name
+    
+    use list of full img filenames, list of subdirectories,
+    include subdirectories Y/N,
+    get rid of empty img recs. Y/N
+    
+    return accumulated counters: imgs added,
+    img recs. deleted + no. of img recs. in db not found in dir
+    """
     global sfcount
     imgcount = 0
     dirid = getdiridfull(fulldirname)
@@ -418,6 +461,7 @@ def syncfolder(fulldirname, absimglist, subdirlist, isrecur, ispack):
         isdel = row[4]
         if filename in imglist:
             continue
+        # filename in db not found in dir
         setnextid(imgid, emptyid)
         emptyid = imgid
         setisdel(imgid, True)
@@ -444,7 +488,10 @@ def syncfolder(fulldirname, absimglist, subdirlist, isrecur, ispack):
     return (imgcount, emptycount)
     
 def pathtolist(path):
-    # assumes path is not absolute
+    """Return list of path parts, lowest to highest level
+    
+    assumes path is not absolute.
+    """
     dirlist = []
     while path != '':
         head, tail = os.path.split(path)
@@ -454,6 +501,8 @@ def pathtolist(path):
     return dirlist
     
 def addfolder(parid, dirname):
+    """Add new dir rec. & return its dirid
+    """
     db = get_db()
     db.execute('insert into dirs (parid, dirname, firstid, emptyid, isdel) values (?, ?, ?, ?, ?)',
         [parid, dirname, 0, 0, False])
@@ -461,6 +510,7 @@ def addfolder(parid, dirname):
     return getfolderid(parid, dirname)
     
 def getfolderid(parid, dirname):
+    """Return dirid of dir rec. having a given parid & dir name."""
     db = get_db()
     cur = db.execute('select dirid, parid, dirname from dirs ' + \
         ('where parid = %d and dirname = "' % parid) + dirname + '"')
@@ -472,6 +522,7 @@ def getfolderid(parid, dirname):
     return dirid
 
 def getfirstemptyids(dirid):
+    """Return first/empty ids of dir rec."""
     db = get_db()
     cur = db.execute('select dirid, firstid, emptyid from dirs ' + \
         'where dirid = %d' % dirid)
@@ -484,12 +535,14 @@ def getfirstemptyids(dirid):
     return (firstid, emptyid)
 
 def setfirstemptyids(dirid, firstid, emptyid):
+    """Set first/empty ids of dir rec. = dirid."""
     db = get_db()
     qry = 'update dirs set firstid = %d, emptyid = %d where dirid = %d ' % (firstid, emptyid, dirid)
     db.execute(qry)
     db.commit()
 
 def addimage(dirid, filename, nextid):
+    """Add new img rec. & return its imgid."""
     db = get_db()
     db.execute('insert into images (dirid, filename, nextid, isurl, isvid, isdel) values (?, ?, ?, ?, ?, ?)',
         [dirid, filename, nextid, False, False, False])
@@ -497,11 +550,13 @@ def addimage(dirid, filename, nextid):
     return getimgid(dirid, filename)
 
 def delimage(imgid):
+    """Delete img rec."""
     db = get_db()
     db.execute('delete from images where imgid = %d' % imgid)
     db.commit()
     
 def getimgid(dirid, filename):
+    """Return imgid of img rec. having a given dirid/filename."""
     db = get_db()
     cur = db.execute('select imgid, dirid, filename from images ' + \
         ('where dirid = %d and filename = "' % dirid) + filename + '"')
@@ -513,6 +568,7 @@ def getimgid(dirid, filename):
     return imgid
 
 def getimgrows(dirid):
+    """Return list of img recs. all having same dirid."""
     db = get_db()
     cur = db.execute('select imgid, dirid, filename, nextid, isdel from images ' + \
         'where dirid = %d' % dirid)
@@ -520,6 +576,7 @@ def getimgrows(dirid):
     return rows
 
 def getdirrows(dirid):
+    """Return list of dir recs. all having same parid."""
     db = get_db()
     cur = db.execute('select dirid, parid, dirname, firstid, emptyid, isdel from dirs ' + \
         'where parid = %d' % dirid)
@@ -527,6 +584,7 @@ def getdirrows(dirid):
     return rows
 
 def getnextid(imgid):
+    """Return nextid from img rec."""
     db = get_db()
     cur = db.execute('select imgid, nextid from images where imgid = %d' % imgid)
     rows = cur.fetchall()
@@ -538,12 +596,14 @@ def getnextid(imgid):
     return nextid
 
 def setnextid(imgid, nextid):
+    """Set nextid of img rec."""
     db = get_db()
     qry = 'update images set nextid = %d where imgid = %d ' % (nextid, imgid)
     db.execute(qry)
     db.commit()
 
 def setisdel(imgid, isdel):
+    """Set isdel bit of img rec."""
     if isdel:
         isdelbit = 1
     else:
@@ -554,6 +614,7 @@ def setisdel(imgid, isdel):
     db.commit()
 
 def isdelimage(imgid):
+    """Return isdel flag of img rec."""
     db = get_db()
     cur = db.execute('select imgid, isdel from images where imgid = %d' % imgid)
     rows = cur.fetchall()
@@ -565,6 +626,11 @@ def isdelimage(imgid):
     return isdel
 
 def undelimage(imgid, emptyid):
+    """Remove img rec. from empty rec. list
+    
+    return emptyid (head of empty rec. list) if unchanged,
+    otherwise return new emptyid
+    """
     lastid = -1
     currid = emptyid
     while (currid >= 0) and (currid != imgid):
@@ -581,6 +647,7 @@ def undelimage(imgid, emptyid):
 @app.route('/dgrid/')
 @app.route('/dgrid/<adir>')
 def dgrid(adir=None):
+    """Handle grid of first images in each subdirectory."""
     if debug:
         print 'top of dgrid'
     global imgdir
@@ -603,11 +670,11 @@ def dgrid(adir=None):
         else:
             namelist.append('')
     pagecount = (len(namelist) - 1) // pagesize
-    pagecount += 1  #!! = 0 ??
-    if adir == "-2":
+    pagecount += 1     ### pagecount = 0 ??
+    if adir == "-2":  # right arrow
         dpageidx += 1
         dnameidx = 0
-    elif adir == "-1":
+    elif adir == "-1":  # left arrow
         dpageidx += pagecount - 1
         dnameidx = 0
     # elif adir == "-3":  
@@ -648,6 +715,7 @@ def dgrid(adir=None):
 @app.route('/grid/')
 @app.route('/grid/<adir>')
 def grid(adir=None):
+    """Handle grid of images in current directory."""
     if debug:
         print 'top of grid'
     global imgdir
@@ -660,15 +728,15 @@ def grid(adir=None):
     # dgmode = 0
     namelist = dirimglist[foldridx]
     pagecount = (len(namelist) - 1) // pagesize
-    pagecount += 1  #!! = 0 ??
+    pagecount += 1     ### pagecount = 0 ??
     if adir != None:
         idir = int(adir)
     else:
         idir = -1
-    if adir == "-2":
+    if adir == "-2":  # right arrow
         pageidx += 1
         nameidx = 0
-    elif adir == "-1":
+    elif adir == "-1":  # left arrow
         pageidx += pagecount - 1
         nameidx = 0
     elif idir >= 0:
@@ -721,6 +789,12 @@ def grid(adir=None):
 @app.route('/mono/')
 @app.route('/mono/<adir>')
 def mono(adir=None):
+    """Handle mono template (single big image displayed)
+    
+    If user presses F, then display free template:
+    - clickable freeones URL of facelooker star (link text is star's name)
+    - Back link to grid template
+    """
     if debug:
         print 'top of mono'
     global nameidx
@@ -731,13 +805,13 @@ def mono(adir=None):
         idir = int(adir)
     if adir == None:
         pass
-    elif idir == -3:
+    elif idir == -3:  # press F
         gofreeflag = True
-    elif idir == -2:
+    elif idir == -2:  # right arrow
         nameidx += 1
-    elif idir == -1:
+    elif idir == -1:  # left arrow
         nameidx += len(namelist) - 1
-    elif idir >= 0:
+    elif idir >= 0:  # image in grid clicked on
         nameidx = idir
     nameidx = getpgidxofcount(nameidx, len(namelist))
     pageidx = nameidx // pagesize
@@ -759,6 +833,10 @@ def mono(adir=None):
     return render_template('mono.html', filename=fullfilename)
 
 def getffndirname(dirname, filename):
+    """Return path join of dir./filename (not full filenames)
+    
+    if dirname = $ (current dir.) just return filename
+    """
     if dirname == dotchar:
         fullfilename = filename
     else:
@@ -766,6 +844,11 @@ def getffndirname(dirname, filename):
     return fullfilename
 
 def getfreeurl(fulldirname, dirname):
+    """Return URL of facelooker star's home page on freeones.com
+    
+    Upon success, ch is first ch. of first name
+    Otherwise give up and don't try to access freeones (go to grid template)
+    """
     filename = getfreename(fulldirname, dirname)
     badname = '/grid/'
     if filename == '':
@@ -777,6 +860,19 @@ def getfreeurl(fulldirname, dirname):
     return outbuf
 
 def getfreename(fulldirname, dirname):
+    """Massage dir name to use for freeones facelooker star home page
+    
+    Sometimes dirname = $ (current dir.):
+    then use fulldirname, otherwise just use dirname
+    
+    scan filename in reverse until non-Linux slash encountered
+    keep scanning in reverse until another slash or invalid ch. encountered
+    (invalid means non-alpha and non-hyphen/underscore ch.)
+    take resulting substring
+    strip initial slash (if any)
+    strip initial underscores
+    return resulting substring = facelooker star's name
+    """
     if dirname == dotchar:
         filename = fulldirname
     else:
@@ -801,6 +897,14 @@ def getfreename(fulldirname, dirname):
     return filename
 
 def getfilenamechar(filename, i):
+    """Massage filenames by scanning one char. at a time
+    
+    Assume ch = filename[i] 
+    convert hyphen to underscore
+    convert upper to lower case
+    strip non-alphas (except hyphens/underscores)
+    return null string if invalid ch.
+    """
     if (i < 0) or (i >= len(filename)):
         return ''
     ch = filename[i]
@@ -812,6 +916,7 @@ def getfilenamechar(filename, i):
     return ch
 
 def isValidAsciiStr(filename):
+    """Return false if filename contains non-printable char."""
     for i in range(len(filename)):
         s = filename[i]
         c = ord(s)
@@ -820,6 +925,10 @@ def isValidAsciiStr(filename):
     return True
     
 def getpgidxofcount(pageidx, pagecount):
+    """Return pageidx % pagecount
+    
+    if pagecount = 0, return zero
+    """
     if pagecount == 0:
         return 0
     pageidx %= pagecount
@@ -841,6 +950,10 @@ def hello_world():
     return 'Hello World!'
 
 def getpardirspath(imgdir):
+    """Return part of full dirname, post '/.../static/pixroot/'.
+    
+    note that string returned does not start with slash
+    """
     n = len(imgroot)
     pardirspath = imgdir[n:]
     return pardirspath
