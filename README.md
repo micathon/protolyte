@@ -1,4 +1,4 @@
-# facelooks
-Image Collection Manager is written in Python and uses Flask
+# flakshare
+Coming soon! Flakshare is an open source (completely free) web-based image sharing tool written in Python, which makes use of Flask and Dropbox.
 
-Facelooks lets you manage your image collection, is written in Python, and requires a free tool called Flask (its database is SQLite which is bundled with Python). Facelooks is open source and web-based, yet almost all images are stored on the local hard drive. Facelooks' basic features let you navigate a tree of folders and image files using the arrow keys. Bottom-level folders let you display images in a grid. Clicking on the grid expands the image to full-screen.
+Every image is stored in either an image folder or a folder named "$" contained in an image folder. All image folders (with certain exceptions) are stored in superfolders. A special superfolder named "z" contains the primary image folders. A subfolder of "z" which is also named "z" contains the tertiary image folders. All other image folders are assumed to be secondary image folders. Images are displayed in either a grid (defaults to 3 rows by 6 columns) or a single large image. The primary, secondary, and tertiary grids are collectively called grid outers. The grids beneath image folders are collectively called grid inners. The grids beneath "$" folders are collectively called grid cores. Image folder names beginning with an underscore are ignored. The user's local Dropbox folder is an ancestor folder of the root folder of all image folders.
