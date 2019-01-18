@@ -1,0 +1,32 @@
+<!doctype html>
+<title>Free</title>
+  <a href="{{ url }}" target="_blank">{{ filename }}</a><br />
+  <a href="/grid/">Back</a>
+<script>
+    function load() {
+        init();
+    }
+    //window.addEventListener( "keydown", doKeyDown, false );
+    window.onload = load;    
+    window.onresize = load;
+
+    function init() {
+        //
+    }
+    function doKeyDown(e){
+        //alert("keyCode: ["+e.keyCode+"]");
+        if (e.keyCode == 37) {    // left arrow
+            window.location = "/mono/-1";
+        }
+        else if (e.keyCode == 39) {    // right arrow
+            window.location = "/mono/-2";
+        }
+        else if (e.keyCode == 38) {    // up arrow
+            window.location = "/grid/";
+        }
+        else if (e.keyCode == 70) {    // (F)ind
+            window.location = "/mono/-3";
+        }
+    }  
+</script>
+  

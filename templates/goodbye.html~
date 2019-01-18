@@ -1,0 +1,6 @@
+<!doctype html>
+<title>Goodbye from Flask</title>
+  <h1>Goodbye!</h1>
+  <a href="/hello/hello.html">
+  <img src="/static/plicroot/{{ filename }}"></img></a>
+  

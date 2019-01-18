@@ -1,0 +1,16 @@
+<!doctype html>
+<title>Hello from Flask</title>
+  <h1>Hello!</h1>
+  <a href="/hello/">
+  <img src="/static/plicroot/{{ filename }}"></img></a>
+<script>
+    //alert("top");
+    window.addEventListener( "keydown", doKeyDown, false );
+    function doKeyDown(e){
+        //alert("keyCode: ["+e.keyCode+"]");
+        if (e.keyCode == 39) {    // left arrow
+            window.location = "/hello/";
+        }
+    }  
+</script>
+  
