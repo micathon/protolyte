@@ -1,0 +1,105 @@
+<!doctype html>
+<title>Bytro</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <div id="hint">
+  <p><b>STATUS</b> ( Press H for Help )</p>
+  </div>
+  {{ udirlist }}
+  <div id="menu">
+  <hr>
+  <p>Help Menu</p>
+  <ul>
+  <li>Left/Right: previous/next</li>
+  <li>Up/Down: navigate image database</li>
+  <li>Enter: select (or toggle this screen on/off)</li>
+  <li>H: toggle help menu on/off</li>
+  <li>S: sync all bytros</li>
+  <li>T: sync current bytro</li>
+  <li>R: re-shuffle image lists</li>
+  <li>Z: zero out image list indexes</li>
+  </ul>
+  </div>
+  
+<script>
+    //alert("top of bytro.html");
+    var isConfirm = false;
+    var isAllBytros = false;
+    showHint("");
+    window.addEventListener( "keydown", doKeyDown, false );
+    //alert("btm of bytro.html");
+    
+    function doKeyDown(e){
+        //alert("keyCode: ["+e.keyCode+"]");
+        if (isConfirm) {
+            if (e.keyCode == 78 || e.keyCode == 13) {
+                isConfirm = false;
+                showHint("");
+            }
+            else if (e.keyCode !== 89) { }
+            else if (isAllBytros) {
+                showHint("W");
+                window.location = "/bytro/-13";
+            }
+            else {
+                showHint("W");
+                window.location = "/bytro/-12";
+            }
+        }
+        else if (e.keyCode == 39) {    // right arrow
+            window.location = "/bytro/-1";
+        }
+        else if (e.keyCode == 37) {    // left arrow
+            window.location = "/bytro/-2";
+        }
+        else if (e.keyCode == 13) {    // Enter
+            window.location = "/igrid/";
+        }
+        else if (e.keyCode == 72) {    // H - Help
+            toggleHelp("menu");
+        }
+        else if (e.keyCode == 82) {    // R - Reshuffle
+            window.location = "/bytro/-10";
+        }
+        else if (e.keyCode == 83) {    // S - Sync all bytros
+            showHint("S: sync all bytros");
+            isAllBytros = true;
+            isConfirm = true;
+        }
+        else if (e.keyCode == 84) {    // T - Sync current bytro
+            showHint("T: sync current bytro");
+            isAllBytros = false;
+            isConfirm = true;
+        }
+        else if (e.keyCode == 90) {    // Z - Zero out indices
+            window.location = "/bytro/-11";
+        }
+    }  
+    function toggleHelp(idstr) {
+        var x = document.getElementById(idstr);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }    
+    }
+    function showHint(msg) {
+        var x = document.getElementById("hint");
+        var y = document.getElementById("menu");
+        pre = "STATUS";
+        if (msg === '') {
+            msg = "Press H for Help";
+        }
+        else if (msg === "W") {
+            msg = "Please wait...";
+        }
+        else {
+            pre = "CONFIRM [Y/N]";
+        }
+        x.innerHTML = "<p><b>" + pre + "</b> ( " + msg + " )</p>";
+        x.style.display = "block";
+        y.style.display = "none";
+    }
+    
+</script>
+  
